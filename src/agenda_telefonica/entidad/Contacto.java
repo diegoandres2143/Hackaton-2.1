@@ -69,12 +69,11 @@ public class Contacto {
         this.telefono = telefono.trim();
     }
 
-    /**
-     * Compara dos contactos para determinar si son iguales (sin distinguir mayusculas/minusculas )
-     * Dos contactos son iguales si tienen el mismo nombre y apellido ()
-     * obj El objeto a comparar
-     * @return true si los contactos son iguales, false en caso contrario
-     */
+
+//     Compara dos contactos para determinar si son iguales (sin distinguir mayusculas/minusculas )
+//     obj El objeto a comparar
+//     @return true si los contactos son iguales, false en caso contrario
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -85,10 +84,9 @@ public class Contacto {
                 apellido.equalsIgnoreCase(contacto.apellido);
     }
 
-    /**
-     * Genera un hash code basado en el nombre y apellido (sin distinguir mayusculas/minusculas)
-     * @return El hash code del contacto
-     */
+
+//     Genera un hash code basado en el nombre y apellido (sin distinguir mayusculas/minusculas)
+
     @Override
     public int hashCode() {
         return (nombre.toLowerCase() + apellido.toLowerCase()).hashCode();
