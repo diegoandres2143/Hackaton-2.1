@@ -79,7 +79,7 @@ public class Main {
             
             1. Agregar contacto
             2. Eliminar contacto
-            3. Modificar telefono
+            3. Modificar teléfono
             4. Verificar si la agenda esta llena
             5. Mostrar espacio disponible en la agenda
             6. Buscar contacto
@@ -120,13 +120,16 @@ public class Main {
                         agenda.mostrarInformacion();
                         break;
                     case 9:
-                        System.out.println("Gracias por usar el Gestor de Agenda Telefonica!");
+                        System.out.println("------------------------------------------------");
+                        System.out.println("¡Gracias por usar el Gestor de Agenda Telefónica!");
                         break;
                     default:
-                        System.out.println("Opcion invalida. Por favor, seleccione una opcion del 1 al 9.");
+                        System.out.println("-------------------------------------------------------------");
+                        System.out.println("Opción inválida. Por favor, seleccione una opcion del 1 al 9.");
+                        System.out.println("");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Error: Debe ingresar un numero valido.");
+                System.out.println("Error: Debe ingresar un número válido.");
                 opcion = 0; // Para continuar el bucle
             }
 
@@ -135,11 +138,10 @@ public class Main {
         scanner.close();
     }
 
-    /**
-     * Permite al usuario agregar un nuevo contacto
-     */
+    //Agregar un nuevo contacto
+
     private static void agregarContacto() {
-        System.out.println("\n=== AGREGAR CONTACTO ===");
+        System.out.println("\n=========== AGREGAR CONTACTO ===========\n");
 
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine().trim();
@@ -147,7 +149,7 @@ public class Main {
         System.out.print("Ingrese el apellido: ");
         String apellido = scanner.nextLine().trim();
 
-        System.out.print("Ingrese el telefono (10 numeros): ");
+        System.out.print("Ingrese el teléfono (10 numeros): ");
         String telefono = scanner.nextLine().trim();
 
         try {
@@ -158,14 +160,13 @@ public class Main {
         }
     }
 
-    /**
-     * Permite al usuario eliminar un contacto
-     */
+    //Permite al usuario eliminar un contacto
+
     private static void eliminarContacto() {
-        System.out.println("\n=== ELIMINAR CONTACTO ===");
+        System.out.println("\n========== ELIMINAR CONTACTO ===========");
 
         if (agenda.getNumeroContactos() == 0) {
-            System.out.println("La agenda esta vacia. No hay contactos para eliminar.");
+            System.out.println("La agenda esta vacía. No hay contactos para eliminar.");
             return;
         }
 
@@ -179,18 +180,17 @@ public class Main {
         if (contacto != null) {
             agenda.eliminarContacto(contacto);
         } else {
-            System.out.println("No se encontro el contacto " + nombre + " " + apellido + " en la agenda.");
+            System.out.println("No se encontró el contacto " + nombre + " " + apellido + " en la agenda.");
         }
     }
 
-    /**
-     * Permite al usuario modificar el telefono de un contacto
-     */
+    //Permite al usuario modificar el telefono de un contacto
+
     private static void modificarTelefono() {
-        System.out.println("\n=== MODIFICAR TELEFONO ===");
+        System.out.println("\n========== MODIFICAR TELÉFONO ==========");
 
         if (agenda.getNumeroContactos() == 0) {
-            System.out.println("La agenda esta vacia. No hay contactos para modificar.");
+            System.out.println("La agenda esta vacía. No hay contactos para modificar.");
             return;
         }
 
@@ -200,42 +200,41 @@ public class Main {
         System.out.print("Ingrese el apellido del contacto: ");
         String apellido = scanner.nextLine().trim();
 
-        System.out.print("Ingrese el nuevo telefono (10 numeros): ");
+        System.out.print("Ingrese el nuevo teléfono (10 números): ");
         String nuevoTelefono = scanner.nextLine().trim();
 
         agenda.modificarTelefono(nombre, apellido, nuevoTelefono);
     }
 
-    /**
-     * Verifica y muestra si la agenda está llena
-     */
+    //Verifica y muestra si la agenda está llena o no
+
     private static void verificarAgendaLlena() {
-        System.out.println("\n=== VERIFICAR AGENDA LLENA ===");
+        System.out.println("\n=========== VERIFICAR AGENDA LLENA ===========");
 
         if (agenda.agendaLlena()) {
+            System.out.println("---------------------------------------------------------------------");
             System.out.println("La agenda esta llena. No hay espacio disponible para nuevos contactos.");
         } else {
-            System.out.println("La agenda no esta llena. Aun hay espacio disponible para nuevos contactos.");
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("La agenda no esta llena. Aún hay espacio disponible para nuevos contactos.");
         }
     }
 
-    /**
-     * Muestra cuantos espacios libres hay en la agenda
-     */
+    // Muestra cuantos espacios libres hay en la agenda
+
     private static void mostrarEspaciosLibres() {
-        System.out.println("\n=== ESPACIOS LIBRES ===");
+        System.out.println("\n============= ESPACIOS LIBRES ============");
 
         int espaciosLibres = agenda.espacioLibres();
-        System.out.println("Se pueden agregar " + espaciosLibres + " contactos mas a la agenda.");
-        System.out.println("Tamano maximo: " + agenda.getTamanoMaximo());
+        System.out.println("Se pueden agregar " + espaciosLibres + " contactos más a la agenda.");
+        System.out.println("Tamaño máximo: " + agenda.getTamanoMaximo());
         System.out.println("Contactos actuales: " + agenda.getNumeroContactos());
     }
 
-    /**
-     * Permite al usuario buscar un contacto
-     */
+    // Permite al usuario buscar un contacto
+
     private static void buscarContacto() {
-        System.out.println("\n=== BUSCAR CONTACTO ===");
+        System.out.println("\n============= BUSCAR CONTACTO ============");
 
         System.out.print("Ingrese el nombre del contacto: ");
         String nombre = scanner.nextLine().trim();
@@ -247,7 +246,7 @@ public class Main {
         if (contacto != null) {
             System.out.println("Contacto encontrado: " + contacto);
         } else {
-            System.out.println("No se encontro el contacto " + nombre + " " + apellido + " en la agenda.");
+            System.out.println("No se encontró el contacto " + nombre + " " + apellido + " en la agenda.");
         }
     }
 }
