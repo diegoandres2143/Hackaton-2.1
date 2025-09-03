@@ -28,11 +28,57 @@ public class VentanaAgenda extends JFrame {
     private static final Color COLOR_FONDO = new Color(236, 240, 241);
 
     public VentanaAgenda() {
-        agenda = new Agenda();
+        inicializarAgenda();
         inicializarComponentes();
         configurarVentana();
         actualizarTabla();
         actualizarInfo();
+    }
+
+    private void inicializarAgenda() {
+        // Diálogo simple para configurar el tamaño de la agenda
+        String input = JOptionPane.showInputDialog(
+                null,
+                "Ingrese el tamano maximo de la agenda (numero de contactos):\n\n" +
+                        "Si deja vacio, se usara el tamano por defecto (10 contactos)",
+                "Configuracion de Agenda",
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null) {
+            // Usuario cancelo, usar tamano por defecto
+            agenda = new Agenda();
+            JOptionPane.showMessageDialog(null,
+                    "Agenda creada con tamano por defecto (10 contactos).",
+                    "Configuracion", JOptionPane.INFORMATION_MESSAGE);
+        } else if (input.trim().isEmpty()) {
+            // Campo vacio, usar tamano por defecto
+            agenda = new Agenda();
+            JOptionPane.showMessageDialog(null,
+                    "Agenda creada con tamano por defecto (10 contactos).",
+                    "Configuracion", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Intentar crear agenda con tamano personalizado
+            try {
+                int tamano = Integer.parseInt(input.trim());
+                if (tamano <= 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "El tamano debe ser mayor que 0. Se creara con tamano por defecto (10 contactos).",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    agenda = new Agenda();
+                } else {
+                    agenda = new Agenda(tamano);
+                    JOptionPane.showMessageDialog(null,
+                            "Agenda creada con tamano maximo de " + tamano + " contactos.",
+                            "Configuracion Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Numero invalido. Se creara con tamano por defecto (10 contactos).",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                agenda = new Agenda();
+            }
+        }
     }
 
     private void inicializarComponentes() {
@@ -57,13 +103,13 @@ public class VentanaAgenda extends JFrame {
         panel.setBackground(COLOR_FONDO);
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 10, 15));
 
-        // Título principal
+        // Titulo principal
         labelTitulo = new JLabel("Sistema de Agenda Telefonica", JLabel.CENTER);
         labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         labelTitulo.setForeground(COLOR_PRINCIPAL);
         panel.add(labelTitulo, BorderLayout.NORTH);
 
-        // Panel de información
+        // Panel de informacion
         JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelInfo.setBackground(COLOR_FONDO);
 
@@ -86,7 +132,7 @@ public class VentanaAgenda extends JFrame {
         panel.setBackground(COLOR_FONDO);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-        // Título de la tabla
+        // Titulo de la tabla
         JLabel tituloTabla = new JLabel("Lista de Contactos");
         tituloTabla.setFont(new Font("Segoe UI", Font.BOLD, 16));
         tituloTabla.setForeground(COLOR_PRINCIPAL);
@@ -201,92 +247,38 @@ public class VentanaAgenda extends JFrame {
     }
 
     private void mostrarDialogoAgregar() {
-        JDialog dialogo = new JDialog(this, "Agregar Nuevo Contacto", true);
-        dialogo.setSize(450, 300);
-        dialogo.setLocationRelativeTo(this);
-        dialogo.setLayout(new BorderLayout());
-        dialogo.getContentPane().setBackground(COLOR_FONDO);
-
-        // Panel del formulario
-        JPanel panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setBackground(COLOR_FONDO);
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-
-        // Campos del formulario
-        JLabel labelNombre = new JLabel("Nombre:");
-        labelNombre.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Crear campos de texto simples
         JTextField campoNombre = new JTextField(20);
-        campoNombre.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoNombre.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
-
-        JLabel labelApellido = new JLabel("Apellido:");
-        labelApellido.setFont(new Font("Segoe UI", Font.BOLD, 12));
         JTextField campoApellido = new JTextField(20);
-        campoApellido.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoApellido.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
-
-        JLabel labelTelefono = new JLabel("Telefono:");
-        labelTelefono.setFont(new Font("Segoe UI", Font.BOLD, 12));
         JTextField campoTelefono = new JTextField(20);
+
+        // Configurar los campos
+        campoNombre.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        campoApellido.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         campoTelefono.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoTelefono.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
 
-        // Agregar componentes al panel
-        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelNombre, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoNombre, gbc);
+        // Crear el panel con los campos
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelApellido, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoApellido, gbc);
+        panel.add(new JLabel("Nombre:"));
+        panel.add(campoNombre);
+        panel.add(new JLabel("Apellido:"));
+        panel.add(campoApellido);
+        panel.add(new JLabel("Telefono (10 numeros):"));
+        panel.add(campoTelefono);
 
-        gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelTelefono, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoTelefono, gbc);
+        // Mostrar el diálogo
+        int resultado = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Agregar Nuevo Contacto",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
 
-        // Panel de botones
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(COLOR_FONDO);
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-        JButton btnGuardar = new JButton("Guardar");
-        JButton btnCancelar = new JButton("Cancelar");
-
-        btnGuardar.setBackground(COLOR_EXITO);
-        btnGuardar.setForeground(Color.WHITE);
-        btnGuardar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnGuardar.setPreferredSize(new Dimension(100, 35));
-        btnGuardar.setFocusPainted(false);
-
-        btnCancelar.setBackground(COLOR_PELIGRO);
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnCancelar.setPreferredSize(new Dimension(100, 35));
-        btnCancelar.setFocusPainted(false);
-
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnCancelar);
-
-        dialogo.add(panelFormulario, BorderLayout.CENTER);
-        dialogo.add(panelBotones, BorderLayout.SOUTH);
-
-        // Acciones de los botones
-        btnGuardar.addActionListener(e -> {
+        // Procesar el resultado
+        if (resultado == JOptionPane.OK_OPTION) {
             try {
                 String nombre = campoNombre.getText().trim();
                 String apellido = campoApellido.getText().trim();
@@ -302,18 +294,11 @@ public class VentanaAgenda extends JFrame {
                     mostrarMensaje("Contacto agregado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
                     actualizarTabla();
                     actualizarInfo();
-                    dialogo.dispose();
-                } else {
-                    mostrarMensaje("No se pudo agregar el contacto. Verifique que no exista ya.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (IllegalArgumentException ex) {
                 mostrarMensaje(ex.getMessage(), "Error de Validacion", JOptionPane.ERROR_MESSAGE);
             }
-        });
-
-        btnCancelar.addActionListener(e -> dialogo.dispose());
-
-        dialogo.setVisible(true);
+        }
     }
 
     private void mostrarDialogoModificar() {
@@ -323,92 +308,92 @@ public class VentanaAgenda extends JFrame {
             return;
         }
 
-        String nombre = (String) modelo.getValueAt(filaSeleccionada, 0);
-        String apellido = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String nombreActual = (String) modelo.getValueAt(filaSeleccionada, 0);
+        String apellidoActual = (String) modelo.getValueAt(filaSeleccionada, 1);
         String telefonoActual = (String) modelo.getValueAt(filaSeleccionada, 2);
 
-        JDialog dialogo = new JDialog(this, "Modificar Telefono", true);
-        dialogo.setSize(400, 200);
-        dialogo.setLocationRelativeTo(this);
-        dialogo.setLayout(new BorderLayout());
-        dialogo.getContentPane().setBackground(COLOR_FONDO);
-
-        JPanel panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setBackground(COLOR_FONDO);
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-
-        JLabel labelContacto = new JLabel("Contacto: " + nombre + " " + apellido);
-        labelContacto.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        labelContacto.setForeground(COLOR_PRINCIPAL);
-
-        JLabel labelTelefono = new JLabel("Nuevo Telefono:");
-        labelTelefono.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Crear campos de texto
+        JTextField campoNombre = new JTextField(nombreActual, 20);
+        JTextField campoApellido = new JTextField(apellidoActual, 20);
         JTextField campoTelefono = new JTextField(telefonoActual, 20);
+
+        // Configurar los campos
+        campoNombre.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        campoApellido.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         campoTelefono.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoTelefono.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        panelFormulario.add(labelContacto, gbc);
+        // Crear el panel
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelTelefono, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoTelefono, gbc);
+        panel.add(new JLabel("Nombre:"));
+        panel.add(campoNombre);
+        panel.add(new JLabel("Apellido:"));
+        panel.add(campoApellido);
+        panel.add(new JLabel("Telefono (10 numeros):"));
+        panel.add(campoTelefono);
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(COLOR_FONDO);
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        // Mostrar el diálogo
+        int resultado = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Modificar Contacto",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
 
-        JButton btnGuardar = new JButton("Guardar");
-        JButton btnCancelar = new JButton("Cancelar");
-
-        btnGuardar.setBackground(COLOR_INFO);
-        btnGuardar.setForeground(Color.WHITE);
-        btnGuardar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnGuardar.setPreferredSize(new Dimension(100, 35));
-        btnGuardar.setFocusPainted(false);
-
-        btnCancelar.setBackground(COLOR_PELIGRO);
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnCancelar.setPreferredSize(new Dimension(100, 35));
-        btnCancelar.setFocusPainted(false);
-
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnCancelar);
-
-        dialogo.add(panelFormulario, BorderLayout.CENTER);
-        dialogo.add(panelBotones, BorderLayout.SOUTH);
-
-        btnGuardar.addActionListener(e -> {
+        // Procesar el resultado
+        if (resultado == JOptionPane.OK_OPTION) {
             try {
+                String nuevoNombre = campoNombre.getText().trim();
+                String nuevoApellido = campoApellido.getText().trim();
                 String nuevoTelefono = campoTelefono.getText().trim();
-                if (nuevoTelefono.isEmpty()) {
-                    mostrarMensaje("El telefono no puede estar vacio", "Error", JOptionPane.ERROR_MESSAGE);
+
+                if (nuevoNombre.isEmpty() || nuevoApellido.isEmpty() || nuevoTelefono.isEmpty()) {
+                    mostrarMensaje("Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                if (agenda.modificarTelefono(nombre, apellido, nuevoTelefono)) {
-                    mostrarMensaje("Telefono modificado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
-                    actualizarTabla();
-                    dialogo.dispose();
-                } else {
-                    mostrarMensaje("No se pudo modificar el telefono", "Error", JOptionPane.ERROR_MESSAGE);
+                // Verificar si el nombre o apellido cambiaron
+                boolean nombreCambio = !nuevoNombre.equals(nombreActual);
+                boolean apellidoCambio = !nuevoApellido.equals(apellidoActual);
+                boolean telefonoCambio = !nuevoTelefono.equals(telefonoActual);
+
+                if (nombreCambio || apellidoCambio) {
+                    // Si cambió el nombre o apellido, verificar que no exista otro contacto con esos datos
+                    Contacto contactoExistente = agenda.buscarContacto(nuevoNombre, nuevoApellido);
+                    if (contactoExistente != null &&
+                            (!nuevoNombre.equals(nombreActual) || !nuevoApellido.equals(apellidoActual))) {
+                        mostrarMensaje("Ya existe un contacto con ese nombre y apellido", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
+
+                // Modificar el teléfono si cambió
+                if (telefonoCambio) {
+                    if (agenda.modificarTelefono(nombreActual, apellidoActual, nuevoTelefono)) {
+                        mostrarMensaje("Telefono modificado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+
+                // Si cambió el nombre o apellido, eliminar el contacto anterior y agregar el nuevo
+                if (nombreCambio || apellidoCambio) {
+                    Contacto contactoAnterior = agenda.buscarContacto(nombreActual, apellidoActual);
+                    if (contactoAnterior != null) {
+                        agenda.eliminarContacto(contactoAnterior);
+                        Contacto nuevoContacto = new Contacto(nuevoNombre, nuevoApellido, nuevoTelefono);
+                        if (agenda.agregarContacto(nuevoContacto)) {
+                            mostrarMensaje("Contacto modificado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+
+                actualizarTabla();
+
             } catch (IllegalArgumentException ex) {
                 mostrarMensaje(ex.getMessage(), "Error de Validacion", JOptionPane.ERROR_MESSAGE);
             }
-        });
-
-        btnCancelar.addActionListener(e -> dialogo.dispose());
-
-        dialogo.setVisible(true);
+        }
     }
 
     private void eliminarContactoSeleccionado() {
@@ -438,73 +423,34 @@ public class VentanaAgenda extends JFrame {
     }
 
     private void mostrarDialogoBuscar() {
-        JDialog dialogo = new JDialog(this, "Buscar Contacto", true);
-        dialogo.setSize(350, 180);
-        dialogo.setLocationRelativeTo(this);
-        dialogo.setLayout(new BorderLayout());
-        dialogo.getContentPane().setBackground(COLOR_FONDO);
-
-        JPanel panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setBackground(COLOR_FONDO);
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-
-        JLabel labelNombre = new JLabel("Nombre:");
-        labelNombre.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Crear campos de texto simples
         JTextField campoNombre = new JTextField(15);
-        campoNombre.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoNombre.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
-
-        JLabel labelApellido = new JLabel("Apellido:");
-        labelApellido.setFont(new Font("Segoe UI", Font.BOLD, 12));
         JTextField campoApellido = new JTextField(15);
+
+        // Configurar los campos
+        campoNombre.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         campoApellido.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        campoApellido.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_SECUNDARIO, 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelNombre, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoNombre, gbc);
+        // Crear el panel con los campos
+        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.EAST;
-        panelFormulario.add(labelApellido, gbc);
-        gbc.gridx = 1; gbc.anchor = GridBagConstraints.WEST;
-        panelFormulario.add(campoApellido, gbc);
+        panel.add(new JLabel("Nombre:"));
+        panel.add(campoNombre);
+        panel.add(new JLabel("Apellido:"));
+        panel.add(campoApellido);
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(COLOR_FONDO);
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        // Mostrar el diálogo
+        int resultado = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Buscar Contacto",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
 
-        JButton btnBuscar = new JButton("Buscar");
-        JButton btnCancelar = new JButton("Cancelar");
-
-        btnBuscar.setBackground(COLOR_ADVERTENCIA);
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnBuscar.setPreferredSize(new Dimension(100, 35));
-        btnBuscar.setFocusPainted(false);
-
-        btnCancelar.setBackground(COLOR_PELIGRO);
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnCancelar.setPreferredSize(new Dimension(100, 35));
-        btnCancelar.setFocusPainted(false);
-
-        panelBotones.add(btnBuscar);
-        panelBotones.add(btnCancelar);
-
-        dialogo.add(panelFormulario, BorderLayout.CENTER);
-        dialogo.add(panelBotones, BorderLayout.SOUTH);
-
-        btnBuscar.addActionListener(e -> {
+        // Procesar el resultado
+        if (resultado == JOptionPane.OK_OPTION) {
             String nombre = campoNombre.getText().trim();
             String apellido = campoApellido.getText().trim();
 
@@ -515,15 +461,15 @@ public class VentanaAgenda extends JFrame {
 
             Contacto encontrado = agenda.buscarContacto(nombre, apellido);
             if (encontrado != null) {
-                mostrarMensaje("Contacto encontrado:\n" + encontrado.toString(), "Resultado de Busqueda", JOptionPane.INFORMATION_MESSAGE);
+                mostrarMensaje("Contacto encontrado:\n" +
+                                "Nombre: " + encontrado.getNombre() + "\n" +
+                                "Apellido: " + encontrado.getApellido() + "\n" +
+                                "Telefono: " + encontrado.getTelefono(),
+                        "Resultado de Busqueda", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 mostrarMensaje("Contacto no encontrado", "Resultado de Busqueda", JOptionPane.INFORMATION_MESSAGE);
             }
-        });
-
-        btnCancelar.addActionListener(e -> dialogo.dispose());
-
-        dialogo.setVisible(true);
+        }
     }
 
     private void limpiarAgenda() {
@@ -566,7 +512,7 @@ public class VentanaAgenda extends JFrame {
     private void actualizarInfo() {
         String info = String.format("Tamano maximo: %d | Contactos: %d | Espacios libres: %d | %s",
                 agenda.getTamanoMaximo(),
-                agenda.getContactos().size(),
+                agenda.getNumeroContactos(),
                 agenda.espacioLibres(),
                 agenda.agendaLlena() ? "Llena" : "Disponible"
         );
