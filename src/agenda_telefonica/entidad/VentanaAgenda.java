@@ -292,6 +292,8 @@ public class VentanaAgenda extends JFrame {
                     mostrarMensaje("Contacto se ha agregado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
                     actualizarTabla();
                     actualizarInfo();
+                }else {
+                    mostrarMensaje("Nombre de contacto ya existe", "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (IllegalArgumentException ex) {
                 mostrarMensaje(ex.getMessage(), "Error de Validacion", JOptionPane.ERROR_MESSAGE);
