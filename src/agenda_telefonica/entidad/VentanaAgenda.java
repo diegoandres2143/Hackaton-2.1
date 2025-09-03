@@ -7,10 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-/**
- * Interfaz gráfica moderna para el sistema de agenda telefónica
- * Desarrollada con Java Swing para proporcionar una experiencia de usuario intuitiva
- */
+//Interfaz gráfica agendatelefónica
+
 public class VentanaAgenda extends JFrame {
     private Agenda agenda;
     private JTable tablaContactos;
@@ -18,7 +16,7 @@ public class VentanaAgenda extends JFrame {
     private JLabel labelInfo;
     private JLabel labelTitulo;
 
-    // Colores del tema
+    // tema
     private static final Color COLOR_PRINCIPAL = new Color(41, 128, 185);
     private static final Color COLOR_SECUNDARIO = new Color(52, 152, 219);
     private static final Color COLOR_EXITO = new Color(39, 174, 96);
@@ -35,12 +33,12 @@ public class VentanaAgenda extends JFrame {
         actualizarInfo();
     }
 
+    // clase que define el tamaño de la agenda
     private void inicializarAgenda() {
-        // Diálogo simple para configurar el tamaño de la agenda
         String input = JOptionPane.showInputDialog(
                 null,
-                "Ingrese el tamano de la agenda (numero de contactos):\n" +
-                        "Si deja vacio, se usara el tamano por defecto (10 contactos)",
+                "Ingrese la cantidad de contactos que quieres guardar en la agenda (numero de contactos):\n" +
+                        "Si no define un número de contactos, se usara el tamaño por defecto (10 contactos)",
                 "Configuracion de Agenda",
                 JOptionPane.QUESTION_MESSAGE
         );
@@ -52,29 +50,29 @@ public class VentanaAgenda extends JFrame {
                     "Agenda creada por defecto (10 contactos).",
                     "Configuracion", JOptionPane.INFORMATION_MESSAGE);
         } else if (input.trim().isEmpty()) {
-            // Campo vacio, usar tamano por defecto
+            // Campo vacio, usar tamaño por defecto.
             agenda = new Agenda();
             JOptionPane.showMessageDialog(null,
                     "Agenda creada con tamano por defecto (10 contactos).",
                     "Configuracion", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            // Intentar crear agenda con tamano personalizado
+            // Intentar crear tamaño de agenda
             try {
                 int tamano = Integer.parseInt(input.trim());
                 if (tamano <= 0) {
                     JOptionPane.showMessageDialog(null,
-                            "El tamano debe ser mayor que 0. Se creara con tamano por defecto (10 contactos).",
+                            "El tamaño debe ser mayor que 0. Se creara con tamaño por defecto (10 contactos).",
                             "Error", JOptionPane.ERROR_MESSAGE);
                     agenda = new Agenda();
                 } else {
                     agenda = new Agenda(tamano);
                     JOptionPane.showMessageDialog(null,
-                            "Agenda creada con tamano maximo de " + tamano + " contactos.",
+                            "Agenda creada con tamaño maximo de " + tamano + " contactos.",
                             "Configuracion Exitosa", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null,
-                        "Numero invalido. Se creara con tamano por defecto (10 contactos).",
+                        "Número invalido. Se creara con tamaño por defecto (10 contactos).",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 agenda = new Agenda();
             }
@@ -104,7 +102,7 @@ public class VentanaAgenda extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 10, 15));
 
         // Titulo principal
-        labelTitulo = new JLabel("Sistema de Agenda Telefonica", JLabel.CENTER);
+        labelTitulo = new JLabel("Agenda Telefonica", JLabel.CENTER);
         labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         labelTitulo.setForeground(COLOR_PRINCIPAL);
         panel.add(labelTitulo, BorderLayout.NORTH);
@@ -291,7 +289,7 @@ public class VentanaAgenda extends JFrame {
 
                 Contacto nuevoContacto = new Contacto(nombre, apellido, telefono);
                 if (agenda.agregarContacto(nuevoContacto)) {
-                    mostrarMensaje("Contacto agregado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    mostrarMensaje("Contacto se ha agregado exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
                     actualizarTabla();
                     actualizarInfo();
                 }
@@ -304,7 +302,7 @@ public class VentanaAgenda extends JFrame {
     private void mostrarDialogoModificar() {
         int filaSeleccionada = tablaContactos.getSelectedRow();
         if (filaSeleccionada == -1) {
-            mostrarMensaje("Seleccione un contacto de la tabla para modificar", "Sin Seleccion", JOptionPane.WARNING_MESSAGE);
+            mostrarMensaje("Seleccione el contacto que quiere modificar", "Sin Seleccion", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -399,7 +397,7 @@ public class VentanaAgenda extends JFrame {
     private void eliminarContactoSeleccionado() {
         int filaSeleccionada = tablaContactos.getSelectedRow();
         if (filaSeleccionada == -1) {
-            mostrarMensaje("Seleccione un contacto de la tabla para eliminar", "Sin Seleccion", JOptionPane.WARNING_MESSAGE);
+            mostrarMensaje("Seleccione el contacto que quiere eliminar", "Sin Seleccion", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
