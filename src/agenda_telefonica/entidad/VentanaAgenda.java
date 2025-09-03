@@ -39,7 +39,7 @@ public class VentanaAgenda extends JFrame {
         // Diálogo simple para configurar el tamaño de la agenda
         String input = JOptionPane.showInputDialog(
                 null,
-                "Ingrese el tamano maximo de la agenda (numero de contactos):\n\n" +
+                "Ingrese el tamano de la agenda (numero de contactos):\n" +
                         "Si deja vacio, se usara el tamano por defecto (10 contactos)",
                 "Configuracion de Agenda",
                 JOptionPane.QUESTION_MESSAGE
@@ -49,7 +49,7 @@ public class VentanaAgenda extends JFrame {
             // Usuario cancelo, usar tamano por defecto
             agenda = new Agenda();
             JOptionPane.showMessageDialog(null,
-                    "Agenda creada con tamano por defecto (10 contactos).",
+                    "Agenda creada por defecto (10 contactos).",
                     "Configuracion", JOptionPane.INFORMATION_MESSAGE);
         } else if (input.trim().isEmpty()) {
             // Campo vacio, usar tamano por defecto

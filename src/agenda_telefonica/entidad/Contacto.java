@@ -1,21 +1,16 @@
 package agenda_telefonica.entidad;
 
-/**
- * Clase que representa un contacto en la agenda telefónica
- * Un contacto está definido por: nombre, apellido y número de teléfono
- */
+
+//Atributos de contacto
+
 public class Contacto {
     private String nombre;
     private String apellido;
     private String telefono;
 
-    /**
-     * Constructor de la clase Contacto
-     * @param nombre El nombre del contacto (no puede estar vacio)
-     * @param apellido El apellido del contacto (no puede estar vacio)
-     * @param telefono El numero de telefono (debe tener formato valido)
-     * @throws IllegalArgumentException si los datos no son validos
-     */
+//    Se crea constructor con parametros ya que se solicita que no tenga campos vacios
+//    @throws IllegalArgumentException si los datos no son validos
+
     public Contacto(String nombre, String apellido, String telefono) {
         validarDatos(nombre, apellido, telefono);
         this.nombre = nombre.trim();
@@ -23,13 +18,9 @@ public class Contacto {
         this.telefono = telefono.trim();
     }
 
-    /**
-     * Valida que los datos del contacto sean correctos
-     * @param nombre El nombre a validar
-     * @param apellido El apellido a validar
-     * @param telefono El telefono a validar
-     * @throws IllegalArgumentException si algun dato no es valido
-     */
+
+//    Metodo para validar campos nombre, apellido y telefono
+
     private void validarDatos(String nombre, String apellido, String telefono) {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacio");
@@ -45,14 +36,10 @@ public class Contacto {
         }
     }
 
-    /**
-     * Valida el formato del numero de telefono
-     * Acepta exactamente 10 numeros sin espacios ni indicativo
-     * @param telefono El numero de telefono a validar
-     * @return true si el formato es valido, false en caso contrario
-     */
+//    Metodo para válidar formato de telefono
+
     private boolean validarFormatoTelefono(String telefono) {
-        // Patron para exactamente 10 numeros: 1234567890
+        // Expresion regular patron para 10 numeros
         String patron = "^\\d{10}$";
         return telefono.matches(patron);
     }
@@ -71,20 +58,21 @@ public class Contacto {
     }
 
     // Setter para telefono (con validacion)
+
     public void setTelefono(String telefono) {
         if (telefono == null || telefono.trim().isEmpty()) {
-            throw new IllegalArgumentException("El telefono no puede estar vacio");
+            throw new IllegalArgumentException("Ingrese un número de telefono");
         }
         if (!validarFormatoTelefono(telefono.trim())) {
-            throw new IllegalArgumentException("El formato del telefono no es valido. Debe contener exactamente 10 numeros (ejemplo: 1234567890)");
+            throw new IllegalArgumentException("Formato de telefono inválido. Debe contener 10 números (ej: 321 2583654)");
         }
         this.telefono = telefono.trim();
     }
 
     /**
-     * Compara dos contactos para determinar si son iguales
-     * Dos contactos son iguales si tienen el mismo nombre y apellido (sin distinguir mayusculas/minusculas)
-     * @param obj El objeto a comparar
+     * Compara dos contactos para determinar si son iguales (sin distinguir mayusculas/minusculas )
+     * Dos contactos son iguales si tienen el mismo nombre y apellido ()
+     * obj El objeto a comparar
      * @return true si los contactos son iguales, false en caso contrario
      */
     @Override
@@ -106,10 +94,9 @@ public class Contacto {
         return (nombre.toLowerCase() + apellido.toLowerCase()).hashCode();
     }
 
-    /**
-     * Representacion en cadena del contacto
-     * @return Una cadena con la informacion del contacto
-     */
+
+//     Representa en cadena el contacto
+
     @Override
     public String toString() {
         return String.format("Nombre: %s %s, Telefono: %s", nombre, apellido, telefono);
