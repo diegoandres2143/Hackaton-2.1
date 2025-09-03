@@ -26,6 +26,9 @@ public class Contacto {
     }
 
     public void setNombre(String nombre) {
+        if(nombre == null || nombre.isEmpty()){
+            throw new IllegalArgumentException("El nombre no puede estar vacio");
+        }
         this.nombre = nombre;
     }
 
@@ -37,5 +40,12 @@ public class Contacto {
         this.telefono = telefono;
     }
 
-
+    @Override
+    public String toString() {
+        return "Contacto{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", telefono=" + telefono +
+                '}';
+    }
 }
