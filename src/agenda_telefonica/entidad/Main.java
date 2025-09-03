@@ -3,6 +3,10 @@ package agenda_telefonica.entidad;
 import java.util.Scanner;
 import java.util.List;
 
+/**
+ * Clase principal que contiene el menú de consola para gestionar la agenda telefónica
+ * Permite probar todas las funcionalidades requeridas
+ */
 public class Main {
     private static Agenda agenda;
     private static Scanner scanner;
@@ -13,83 +17,55 @@ public class Main {
         mostrarMenu();
     }
 
-    //Inicializa la agenda y consulta el tamaño
-
+    /**
+     * Inicializa la agenda con el tamaño especificado por el usuario
+     */
     private static void inicializarAgenda() {
-        System.out.println("");
-        System.out.println("============= BIENVENIDO A TU AGENDA TELEFÓNICA ================\n");
-        while (true) {
-            System.out.print("""
-            ¿Desea crear una agenda con tamaño personalizado?
+        System.out.println("=== GESTOR DE AGENDA TELEFONICA ===");
+        System.out.println("Desea crear una agenda con tamano personalizado? (s/n)");
+        System.out.print("Si responde 'n', se usara el tamano por defecto (10 contactos): ");
 
-            1. Sí
-            2. No (Usará el tamaño por defecto: 10 contactos)
-            """);
-            System.out.print("-> ");
+        String respuesta = scanner.nextLine().trim().toLowerCase();
 
-            int opcion;
-
+        if (respuesta.equals("s") || respuesta.equals("si") || respuesta.equals("si")) {
+            System.out.print("Ingrese el tamano maximo de la agenda: ");
             try {
-                opcion = Integer.parseInt(scanner.nextLine().trim());
+                int tamano = Integer.parseInt(scanner.nextLine().trim());
+                agenda = new Agenda(tamano);
+                System.out.println("Agenda creada con tamano maximo de " + tamano + " contactos.");
             } catch (NumberFormatException e) {
-                System.out.println("----------------------------------------------------");
-                System.out.println("Opción inválida. Debe selecionar la opción 1 ó 2.");
-                System.out.println("");
-                continue;
-            }
-
-            if (opcion == 1) {
-                System.out.println("");
-                System.out.print("Ingrese el tamaño máximo de la agenda: ");
-                try {
-                    int tamano = Integer.parseInt(scanner.nextLine().trim());
-
-                    agenda = new Agenda(tamano);
-                    System.out.println("------------------------------------------------------------");
-                    System.out.println("Agenda creada con tamaño máximo de " + tamano + " contactos.");
-                    System.out.println("");
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("-------------------------------------------------");
-                    System.out.println("Número inválido. Debe ingresar un número entero.");
-                    System.out.println("");
-                    continue;
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Error: " + e.getMessage());
-                    continue;
-                }
-            } else if (opcion == 2) {
+                System.out.println("Numero invalido. Se creara la agenda con tamano por defecto (10 contactos).");
                 agenda = new Agenda();
-                System.out.println("-----------------------------------------------------");
-                System.out.println("Agenda creada con tamaño por defecto (10 contactos).");
-                break;
-            } else {
-                System.out.println("Opción inválida. Debe ingresar 1 ó 2.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage() + ". Se creara la agenda con tamano por defecto (10 contactos).");
+                agenda = new Agenda();
             }
+        } else {
+            agenda = new Agenda();
+            System.out.println("Agenda creada con tamano por defecto (10 contactos).");
         }
+
+        System.out.println();
     }
 
+    /**
+     * Muestra el menú principal y maneja las opciones del usuario
+     */
     private static void mostrarMenu() {
         int opcion;
 
         do {
-            System.out.println("");
-            System.out.print("""
-            ============= MENU PRINCIPAL ============
-            
-            1. Agregar contacto
-            2. Eliminar contacto
-            3. Modificar telefono
-            4. Verificar si la agenda esta llena
-            5. Mostrar espacio disponible en la agenda
-            6. Buscar contacto
-            7. Mostrar todos los contactos
-            8. Mostrar información de la agenda
-            9. Salir
-            
-            Seleccione una opción:
-            """);
-            System.out.print("-> ");
+            System.out.println("\n=== MENU PRINCIPAL ===");
+            System.out.println("1. Agregar contacto");
+            System.out.println("2. Eliminar contacto");
+            System.out.println("3. Modificar telefono");
+            System.out.println("4. Verificar si la agenda esta llena");
+            System.out.println("5. Mostrar espacios libres");
+            System.out.println("6. Buscar contacto");
+            System.out.println("7. Mostrar todos los contactos");
+            System.out.println("8. Mostrar informacion de la agenda");
+            System.out.println("9. Salir");
+            System.out.print("Seleccione una opcion (1-9): ");
 
             try {
                 opcion = Integer.parseInt(scanner.nextLine().trim());
